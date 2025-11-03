@@ -22,6 +22,7 @@ export default function LeaderboardMini({ city, currentScore, resultId }) {
   const loadLeaderboard = async () => {
     try {
       setLoading(true);
+      // Try to load real data, fall back to demo data if index not ready
       const data = await getLeaderboardByCity(city, 5);
       if (data && data.length > 0) {
         setLeaders(data);
@@ -29,7 +30,12 @@ export default function LeaderboardMini({ city, currentScore, resultId }) {
         setLeaders(DEMO_DATA);
       }
     } catch (error) {
-      console.error('Failed to load leaderboard:', error);
+      // If Firebase index is building or not created yet, use demo data
+      if (error.code === 'failed-precondition' || error.message?.includes('index')) {
+        console.warn('⏳ Firebase index building... using demo data temporarily');
+      } else {
+        console.error('Failed to load leaderboard:', error);
+      }
       setLeaders(DEMO_DATA);
     } finally {
       setLoading(false);

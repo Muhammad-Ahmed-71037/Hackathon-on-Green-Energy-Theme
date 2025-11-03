@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AuthProvider } from './context/AuthContext';
 import { LocaleProvider } from './context/LocaleContext';
 import NavBar from './components/NavBar';
-import Home from './pages/Home';
+import ProtectedRoute from './components/ProtectedRoute';
+import LandingPage from './pages/LandingPage';
+import Dashboard from './pages/Dashboard';
 import LeaderboardPage from './pages/LeaderboardPage';
 import ResultPage from './pages/ResultPage';
 import LoginPage from './pages/LoginPage';
@@ -15,8 +17,23 @@ function AppContent() {
     <>
       {!hideNavBar && <NavBar />}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/leaderboard" 
+          element={
+            <ProtectedRoute>
+              <LeaderboardPage />
+            </ProtectedRoute>
+          } 
+        />
         <Route path="/r/:id" element={<ResultPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>

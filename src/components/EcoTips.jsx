@@ -1,7 +1,7 @@
 import { Lightbulb } from 'lucide-react';
 import { useLocale, labels } from '../context/LocaleContext';
 
-export default function EcoTips({ tips }) {
+export default function EcoTips({ tips, source = 'rules', loading = false }) {
   const { locale } = useLocale();
 
   return (
@@ -9,6 +9,16 @@ export default function EcoTips({ tips }) {
       <div className="flex items-center space-x-2 mb-4">
         <Lightbulb className="text-emerald-400" size={24} />
         <h2 className="text-2xl font-bold text-white">{labels.aiCoach[locale]}</h2>
+        {source === 'ai' && (
+          <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            ✨ AI
+          </span>
+        )}
+        {loading && (
+          <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 animate-pulse">
+            ⏳ Loading AI...
+          </span>
+        )}
       </div>
 
       {tips.length === 0 ? (

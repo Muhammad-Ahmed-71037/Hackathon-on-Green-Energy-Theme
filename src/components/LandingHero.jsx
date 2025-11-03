@@ -1,4 +1,5 @@
 import { Zap, FileCheck, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function LandingHero() {
   const scrollToSection = (id) => {
@@ -19,12 +20,12 @@ export default function LandingHero() {
               it — using a simple, Urdu-friendly AI dashboard.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button
-                onClick={() => scrollToSection('app-demo')}
-                className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg shadow-emerald-500/20"
+              <Link
+                to="/dashboard"
+                className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg shadow-emerald-500/20 text-center"
               >
-                Try Live Demo
-              </button>
+                Start Calculating →
+              </Link>
               <button
                 onClick={() => scrollToSection('how-it-works')}
                 className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl border border-white/10 transition-all backdrop-blur-sm"
