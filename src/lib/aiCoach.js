@@ -1,16 +1,10 @@
-// Optional Gemini AI integration for generating personalized energy tips
-// Note: Using this in the browser exposes your API key. For hackathon demos only.
-// In production, proxy this request via a serverless function.
-
 const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
-// Simple in-memory cache to avoid hitting rate limits
 const tipsCache = new Map();
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 5 * 60 * 1000; 
 
-// Rate limiting: minimum delay between API calls
 let lastApiCall = 0;
-const MIN_DELAY = 3000; // 3 seconds between calls
+const MIN_DELAY = 3000; 
 
 function getCacheKey(inputs, outputs) {
   return `${inputs.city}-${inputs.monthlyUnits}-${inputs.heavyHours}-${inputs.daytimeUsagePct}-${Math.round(outputs.systemKW)}`;
@@ -20,7 +14,6 @@ export async function generateAiTips(inputs, outputs) {
   const apiKey = 'AIzaSyClP3FwJ7xjsH_a8ZawOOBZZpXk9n6DTjE';
   if (!apiKey) return null;
 
-  // Check cache first
   const cacheKey = getCacheKey(inputs, outputs);
   const cached = tipsCache.get(cacheKey);
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
@@ -28,7 +21,6 @@ export async function generateAiTips(inputs, outputs) {
     return cached.tips;
   }
 
-  // Rate limiting: ensure minimum delay between API calls
   const now = Date.now();
   const timeSinceLastCall = now - lastApiCall;
   if (timeSinceLastCall < MIN_DELAY) {
@@ -65,13 +57,12 @@ export async function generateAiTips(inputs, outputs) {
     }
 
     const data = await res.json();
-    console.log('🔍 Full Gemini response:', JSON.stringify(data, null, 2)); // Debug: full response
+    console.log('🔍 Full Gemini response:', JSON.stringify(data, null, 2)); 
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    console.log('🤖 Gemini text extracted:', text.substring(0, 200)); // Debug: show first 200 chars
+    console.log('🤖 Gemini text extracted:', text.substring(0, 200)); 
     const parsed = parseTips(text);
     
     if (parsed.length) {
-      // Cache successful results
       tipsCache.set(cacheKey, {
         tips: parsed,
         timestamp: Date.now()

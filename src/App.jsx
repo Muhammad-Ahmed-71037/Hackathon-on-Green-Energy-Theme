@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import LeaderboardPage from './pages/LeaderboardPage';
 import ResultPage from './pages/ResultPage';
 import LoginPage from './pages/LoginPage';
+import NotFound from './NotFound';
 
 function AppContent() {
   const location = useLocation();
@@ -36,6 +37,7 @@ function AppContent() {
         />
         <Route path="/r/:id" element={<ResultPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </>
   );
