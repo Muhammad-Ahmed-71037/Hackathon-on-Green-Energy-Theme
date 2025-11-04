@@ -1,10 +1,12 @@
 import { Zap, FileCheck, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLocale, labels } from '../context/LocaleContext';
 
 export default function LandingHero() {
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
+  const { locale } = useLocale();
 
   return (
     <section id="hero" className="min-h-screen flex items-center bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 pt-20">
@@ -12,25 +14,23 @@ export default function LandingHero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Turn your electricity bill into a{' '}
-              <span className="text-emerald-400">solar plan</span> in 30 seconds.
+              {labels.heroFull[locale]}
             </h1>
             <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed">
-              EcoSync helps homes, shops, and schools in Pakistan see if solar is really worth
-              it — using a simple, Urdu-friendly AI dashboard.
+              {labels.heroSubtitle[locale]}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 to="/dashboard"
                 className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg shadow-emerald-500/20 text-center"
               >
-                Start Calculating →
+                {labels.startCalculating[locale]}
               </Link>
               <button
                 onClick={() => scrollToSection('how-it-works')}
                 className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl border border-white/10 transition-all backdrop-blur-sm"
               >
-                How it works
+                {labels.howItWorksButton[locale]}
               </button>
             </div>
           </div>

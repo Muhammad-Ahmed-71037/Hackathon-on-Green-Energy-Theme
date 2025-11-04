@@ -1,47 +1,43 @@
 import { CheckCircle2, Sparkles, FileText, Globe, Users, TrendingUp } from 'lucide-react';
+import { useLocale, labels } from '../context/LocaleContext';
 
 export default function LandingFeatures() {
+  const { locale } = useLocale();
   const features = [
     {
       icon: CheckCircle2,
-      title: 'Solar Decision Engine',
-      description:
-        'Strong Match / Borderline / Not Ideal verdict with simple Roman Urdu explanations. No technical jargon.',
+      title: labels.feature1Title[locale],
+      description: labels.feature1Desc[locale],
       color: 'emerald',
     },
     {
       icon: Sparkles,
-      title: 'AI Energy Coach',
-      description:
-        'Personalised tips on when to run AC, laundry, and heavy loads to match solar hours and cut waste.',
+      title: labels.feature2Title[locale],
+      description: labels.feature2Desc[locale],
       color: 'blue',
     },
     {
       icon: FileText,
-      title: 'Paperless Proposal',
-      description:
-        'Smart Solar Report and Copy WhatsApp Summary replace handwritten notes and multi-page Excel proposals.',
+      title: labels.feature3Title[locale],
+      description: labels.feature3Desc[locale],
       color: 'purple',
     },
     {
       icon: Globe,
-      title: 'Urdu + English Friendly',
-      description:
-        'Form labels and helper text in simple English and Roman Urdu so anyone can use it.',
+      title: labels.feature4Title[locale],
+      description: labels.feature4Desc[locale],
       color: 'amber',
     },
     {
       icon: Users,
-      title: 'For Home / Shop / School',
-      description:
-        "Persona toggle (Home / Shop / School) so the advice fits the user's context.",
+      title: labels.feature5Title[locale],
+      description: labels.feature5Desc[locale],
       color: 'teal',
     },
     {
       icon: TrendingUp,
-      title: 'Community Impact',
-      description:
-        'Shows how 1,000 homes like yours can save crores of rupees and thousands of tons of CO₂ every year.',
+      title: labels.feature6Title[locale],
+      description: labels.feature6Desc[locale],
       color: 'emerald',
     },
   ];
@@ -50,10 +46,8 @@ export default function LandingFeatures() {
     <section id="features" className="bg-gradient-to-b from-slate-900 to-slate-950 py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Why EcoSync?</h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            Built for Pakistan's energy reality, designed for everyone
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{labels.landingFeaturesHeading[locale]}</h2>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">{labels.landingFeaturesSub[locale]}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

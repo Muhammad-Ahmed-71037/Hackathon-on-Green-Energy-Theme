@@ -1,27 +1,26 @@
 import { FileText, Cpu, Share2 } from 'lucide-react';
+import { useLocale, labels } from '../context/LocaleContext';
 
 export default function LandingHowItWorks() {
+  const { locale } = useLocale();
   const steps = [
     {
       number: '1',
       icon: FileText,
-      title: 'Enter your bill',
-      description:
-        'Select your city, monthly units, and 2–3 simple details like heavy appliance hours and daytime usage.',
+      title: labels.howStep1Title[locale],
+      description: labels.howStep1Desc[locale],
     },
     {
       number: '2',
       icon: Cpu,
-      title: 'Get your smart solar plan',
-      description:
-        'EcoSync calculates recommended system size, savings, payback, EcoScore, and AI tips in under 30 seconds.',
+      title: labels.howStep2Title[locale],
+      description: labels.howStep2Desc[locale],
     },
     {
       number: '3',
       icon: Share2,
-      title: 'Share in one tap',
-      description:
-        'Copy a WhatsApp-ready summary or print a smart solar report for your installer, bank, or NGO.',
+      title: labels.howStep3Title[locale],
+      description: labels.howStep3Desc[locale],
     },
   ];
 
@@ -29,10 +28,8 @@ export default function LandingHowItWorks() {
     <section id="how-it-works" className="bg-slate-950 py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">How EcoSync Works</h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            From bill to solar plan in three simple steps
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{labels.landingHowHeading[locale]}</h2>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">{labels.landingHowSub[locale]}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
