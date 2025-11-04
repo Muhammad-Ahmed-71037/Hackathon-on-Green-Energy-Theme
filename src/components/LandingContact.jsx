@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { Send } from 'lucide-react';
+import { useLocale, labels } from '../context/LocaleContext';
+import { saveContactMessage } from '../lib/contactApi';
 
 export default function LandingContact() {
+  const { locale } = useLocale();
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -9,13 +12,27 @@ export default function LandingContact() {
     message: '',
   });
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+    setLoading(true);
+    try {
+      // Save to Firestore
+      await saveContactMessage(formData);
+      setSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
-    }, 3000);
+    } catch (err) {
+      console.error('Failed to save contact message', err);
+      // still show thank you but log error; optionally show toast later
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+      // auto-hide submission state after 3s
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 3000);
+    }
   };
 
   const handleChange = (e) => {
@@ -29,10 +46,8 @@ export default function LandingContact() {
     <section id="contact" className="bg-gradient-to-b from-slate-950 to-slate-900 py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Contact Us</h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-            For pilots, collaborations, or feedback, reach out and we'll get back to you.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{labels.contactHeading[locale]}</h2>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">{labels.contactSub[locale]}</p>
         </div>
 
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
@@ -41,18 +56,13 @@ export default function LandingContact() {
               <div className="inline-flex p-4 bg-emerald-500/20 rounded-full mb-4">
                 <Send className="text-emerald-400" size={48} />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Thanks for reaching out!</h3>
-              <p className="text-slate-400">
-                This is a demo contact form for the hackathon. In production, we'd get back to you
-                shortly.
-              </p>
+              <h3 className="text-2xl font-bold text-white mb-2">{labels.contactThanksTitle[locale]}</h3>
+              <p className="text-slate-400">{labels.contactThanksBody[locale]}</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
-                  Full Name
-                </label>
+                <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">{labels.fullNameLabel[locale]}</label>
                 <input
                   type="text"
                   id="name"
@@ -61,14 +71,12 @@ export default function LandingContact() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-                  placeholder="Your name"
+                  placeholder={labels.placeholderName[locale]}
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-                  Email Address
-                </label>
+                <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">{labels.emailLabel[locale]}</label>
                 <input
                   type="email"
                   id="email"
@@ -77,14 +85,12 @@ export default function LandingContact() {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-                  placeholder="your@email.com"
+                  placeholder={labels.placeholderEmail[locale]}
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">
-                  Message
-                </label>
+                <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">{labels.messageLabel[locale]}</label>
                 <textarea
                   id="message"
                   name="message"
@@ -93,16 +99,18 @@ export default function LandingContact() {
                   required
                   rows="5"
                   className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none"
-                  placeholder="How can we help?"
+                  placeholder={labels.placeholderMessage[locale]}
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2"
+                disabled={loading}
+                aria-busy={loading}
+                className={`w-full px-8 py-4 ${loading ? 'bg-emerald-400/70 cursor-wait' : 'bg-emerald-500 hover:bg-emerald-600'} text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2`}
               >
                 <Send size={20} />
-                <span>Send Message</span>
+                <span>{loading ? (locale === 'ur' ? 'Bhej rahe hain...' : 'Sending...') : labels.sendMessage[locale]}</span>
               </button>
             </form>
           )}
